@@ -128,6 +128,10 @@ class EvilCircle extends Shape {
           balls[j].exists = false;
           count--;
           para.textContent = "还剩 " + count + " 个球";
+
+          // 当球与恶魔环碰撞时，改变背景颜色为随机颜色
+          ctx.fillStyle = randomBgColor();
+          ctx.fillRect(0, 0, width, height);
         }
       }
     }
@@ -141,7 +145,7 @@ const width = (canvas.width = window.innerWidth);
 const height = (canvas.height = window.innerHeight);
 const balls = [];
 let count = 0;
-const evilBall1 = new EvilCircle( // 添加第二个恶魔环
+const evilBall1 = new EvilCircle(
   random(0, width),
   random(0, height),
   true
@@ -156,11 +160,6 @@ const evilBall3 = new EvilCircle(
   random(0, height),
   true
 );
-
-// 添加开始时间变量和用于显示时间的元素
-let startTime = new Date().getTime();
-const timeDisplay = document.getElementById("timeDisplay");
-
 loop();
 
 function random(min, max) {
@@ -168,6 +167,18 @@ function random(min, max) {
 }
 
 function randomColor() {
+  return (
+    "rgb(" +
+    random(0, 255) +
+    ", " +
+    random(0, 255) +
+    ", " +
+    random(0, 255) +
+    ")"
+  );
+}
+
+function randomBgColor() {// 生成随机背景颜色函数
   return (
     "rgb(" +
     random(0, 255) +
@@ -204,24 +215,17 @@ function loop() {
       balls[i].collisionDetect();
     }
   }
-  evilBall1.draw(); // 绘制第一个恶魔环
+  evilBall1.draw();
   evilBall1.checkBounds();
   evilBall1.collisionDetect();
 
-  evilBall2.draw(); // 绘制第二个恶魔环
+  evilBall2.draw();
   evilBall2.checkBounds();
   evilBall2.collisionDetect();
 
-  evilBall3.draw(); // 绘制第二个恶魔环
+  evilBall3.draw();
   evilBall3.checkBounds();
   evilBall3.collisionDetect();
-
-  // 如果所有球都被消除，计算并显示所用时间
-  if (count === 0) {
-    const endTime = new Date().getTime();
-    const elapsedTime = (endTime - startTime) / 1000; // 转换为秒
-    timeDisplay.textContent = "弹球从开始到全部消除所用时间：" + elapsedTime + " 秒";
-  }
 
   requestAnimationFrame(loop);
 }
